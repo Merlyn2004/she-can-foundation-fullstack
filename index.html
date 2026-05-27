@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+  <link rel="stylesheet" href="style.css">
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp, getDocs, deleteDoc, doc, orderBy, query, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyC7z-eD7WZytrleyjj263mz2zI_AWnmv74",
+    authDomain: "finds-cd706.firebaseapp.com",
+    projectId: "finds-cd706",
+    storageBucket: "finds-cd706.firebasestorage.app",
+    messagingSenderId: "969493799638",
+    appId: "1:969493799638:web:4900d2900a8117b1065f77"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+
+  window.__db = db;
+  window.__auth = auth;
+  window.__fbModules = { collection, addDoc, serverTimestamp, getDocs, deleteDoc, doc, orderBy, query, updateDoc };
+</script>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>She Can Foundation</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════ NAV ══════════════════════════════════════════ -->
+<nav>
+  <div class="nav-logo" onclick="showPage('main')">
+    <div class="icon">♥</div>
+    <div class="brand">
+      <span class="brand-name">She Can</span>
+      <span style="font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase">FOUNDATION</span>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a onclick="showPage('main');smoothTo('home')">Home</a>
+    <a onclick="showPage('main');smoothTo('about')">About</a>
+    <a onclick="showPage('main');smoothTo('programs')">Programs</a>
+    <a onclick="showPage('main');smoothTo('campaign')">Campaign</a>
+    <a onclick="showPage('main');smoothTo('join')">Join Us</a>
+    <a onclick="showPage('main');smoothTo('contact')">Contact</a>
+  </div>
+  <button class="btn-donate" onclick="openDonateModal()">♥ Donate Now</button>
+</nav>
+
+<!-- ══════════════════════════════════════════ MAIN SITE ══════════════════════════════════════════ -->
+<div id="main-site" class="page active">
+
+<!-- HERO -->
+<section id="home" style="padding:0;">
+  <div class="hero-left">
+    <div class="hero-badge"><span>✦</span> WOMEN EMPOWERMENT · <span>INDIAN SOCIETY ACT, 1860</span></div>
+    <h1 class="hero-title">Together We Can<br><em>Change</em> The World</h1>
+    <p class="hero-quote">"We don't ask for much — just help with what you can."</p>
+    <p class="hero-body">She Can Foundation empowers women and uplifts communities across India through education, dignity, and opportunity — building a future where every girl rises.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="openDonateModal()">♥ Donate Now →</button>
+      <button class="btn-secondary" onclick="smoothTo('about')">Our Story</button>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img src="https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?w=1200&q=80&fit=crop&crop=faces,center" alt="Empowered women community" loading="lazy">
+    <div class="hero-img-overlay"></div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat-item"><div class="stat-icon">♥</div><div class="stat-num">1.2L+</div><div class="stat-label">Girls Helped</div></div>
+  <div class="stat-item"><div class="stat-icon">👤</div><div class="stat-num">500+</div><div class="stat-label">Interns</div></div>
+  <div class="stat-item"><div class="stat-icon">🛡</div><div class="stat-num">Govt.</div><div class="stat-label">Registered NGO</div></div>
+  <div class="stat-item">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="width:10px;height:10px;border-radius:50%;background:var(--orange);animation:pulse 1.5s infinite"></div>
+      <div>
+        <div style="font-size:13px;font-weight:600">LIVE IMPACT</div>
+        <div style="font-size:13px;color:var(--muted)">37 girls supported this week</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- IMPACT NUMBERS -->
+<div style="padding:80px 0 0">
+  <div class="impact-grid">
+    <div class="impact-card"><div class="dot"></div><div class="ic-icon">♥</div><div class="ic-num">1,20,000+</div><div class="ic-label">Girls Supported</div></div>
+    <div class="impact-card"><div class="dot"></div><div class="ic-icon">🎓</div><div class="ic-num">500+</div><div class="ic-label">Interns Mentored</div></div>
+    <div class="impact-card"><div class="dot"></div><div class="ic-icon">📍</div><div class="ic-num">10+</div><div class="ic-label">Cities Covered</div></div>
+    <div class="impact-card"><div class="dot"></div><div class="ic-icon">✦</div><div class="ic-num">20+</div><div class="ic-label">Active Programs</div></div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-inner">
+    <div class="about-img">
+      <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=900&q=80&fit=crop&crop=center" alt="NGO community support" loading="lazy">
+      <div class="about-img-overlay-layer"></div>
+      <div class="about-img-badge">
+        <span class="shield">🛡</span>
+        <div>
+          <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">REGISTERED NGO</div>
+          <div style="font-size:13px;font-weight:600">Indian Society Act, 1860</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="section-badge">ABOUT US</div>
+      <h2 class="section-title">A movement built on <em>dignity</em> &amp; opportunity.</h2>
+      <p class="about-body">She Can Foundation is a registered non-profit working at the intersection of education, menstrual health, and economic empowerment. We collaborate with schools, colleges and grassroots leaders to create sustained change for girls and women across India.</p>
+      <div class="about-checklist">
+        <div class="check-item"><span class="check">✓</span> Community support across rural &amp; urban India</div>
+        <div class="check-item"><span class="check">✓</span> Awareness campaigns on health &amp; dignity</div>
+        <div class="check-item"><span class="check">✓</span> Education access for underserved girls</div>
+        <div class="check-item"><span class="check">✓</span> Women empowerment through skills</div>
+        <div class="check-item"><span class="check">✓</span> Internship &amp; mentorship opportunities</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMS -->
+<section id="programs">
+  <div class="section-badge">PROGRAMS</div>
+  <h2 class="section-title">Programs that <em>transform</em> lives.</h2>
+  <p class="section-sub">Four focused initiatives — each designed to remove a real barrier between a girl and her future.</p>
+  <div class="programs-grid">
+    <div class="prog-card" onclick="showPage('prog-menstrual')">
+      <div class="arrow">↗</div>
+      <div class="prog-icon">🔥</div>
+      <h3>Menstrual Health &amp; Dignity</h3>
+      <p>Distributing reusable pads, hygiene kits and breaking taboos through workshops in schools and villages.</p>
+    </div>
+    <div class="prog-card" onclick="showPage('prog-digital')">
+      <div class="arrow">↗</div>
+      <div class="prog-icon">💻</div>
+      <h3>Digital Skills Internship</h3>
+      <p>A 3-month immersive program training young women in design, marketing, content and tech for the modern workforce.</p>
+    </div>
+    <div class="prog-card" onclick="showPage('prog-education')">
+      <div class="arrow">↗</div>
+      <div class="prog-icon">📚</div>
+      <h3>Education Access</h3>
+      <p>Scholarships, mentorship and learning material to keep girls in classrooms — from primary school to college.</p>
+    </div>
+    <div class="prog-card" onclick="showPage('prog-campus')">
+      <div class="arrow">↗</div>
+      <div class="prog-icon">👥</div>
+      <h3>Campus Ambassador Program</h3>
+      <p>Empowering students across India to lead campaigns, organize drives and become voices of change on campus.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CAMPAIGN -->
+<section id="campaign" style="padding:0;display:grid;grid-template-columns:1fr 1fr;">
+  <div class="campaign-left">
+    <div class="active-badge">ACTIVE CAMPAIGN</div>
+    <h2 class="camp-title">Her Period Shouldn't <em>End</em> Her Education.</h2>
+    <p class="camp-body">Every month, thousands of girls across India miss school because of something as natural as menstruation. A small contribution from you keeps a girl in her classroom, in her dreams, in her future.</p>
+    <div class="camp-stat">1,20,000+</div>
+    <div class="camp-stat-label">girls helped so far</div>
+    <div class="donation-grid">
+      <div class="donation-card active" onclick="selectDonation(this,'500')"><div class="amount">₹500</div><div class="what">Hygiene kit for 1 girl</div></div>
+      <div class="donation-card" onclick="selectDonation(this,'1500')"><div class="amount">₹1,500</div><div class="what">Educates 1 girl for a month</div></div>
+      <div class="donation-card" onclick="selectDonation(this,'5000')"><div class="amount">₹5,000</div><div class="what">Supports a village workshop</div></div>
+      <div class="donation-card" onclick="selectDonation(this,'10000')"><div class="amount">₹10,000</div><div class="what">Sponsors a full school year</div></div>
+    </div>
+    <button class="btn-primary" onclick="openDonateModal()">♥ Donate to this campaign</button>
+  </div>
+  <div class="campaign-right">
+    <img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=900&q=80&fit=crop&crop=center" alt="Education support for girls" loading="lazy">
+    <div class="camp-img-overlay-layer"></div>
+    <div class="camp-quote-card">
+      <div class="quote-marks">❝❞</div>
+      <p>"I started She Can because I saw too many bright girls forced to choose between dignity and education. No one should have to."</p>
+      <div class="founder"><strong>Founder</strong>She Can Foundation</div>
+    </div>
+  </div>
+</section>
+
+<!-- JOIN US -->
+<section id="join">
+  <div class="section-badge">GET INVOLVED</div>
+  <h2 class="section-title">Be part of the <em>change.</em></h2>
+  <p class="section-sub" style="margin:0 auto 60px">Whether it's an hour or a lifetime — there's a way to stand with the girls we serve. Choose yours.</p>
+  <div class="join-grid">
+    <div class="join-card" onclick="openDonateModal()">
+      <span class="arrow">↗</span>
+      <div class="join-icon">♥</div>
+      <h3>Donate</h3>
+      <p>Fund kits, scholarships and workshops.</p>
+    </div>
+    <div class="join-card" onclick="showPage('volunteer')">
+      <span class="arrow">↗</span>
+      <div class="join-icon">🤝</div>
+      <h3>Volunteer</h3>
+      <p>Lend your time at events and drives.</p>
+    </div>
+    <div class="join-card" onclick="showPage('intern')">
+      <span class="arrow">↗</span>
+      <div class="join-icon">🎓</div>
+      <h3>Intern</h3>
+      <p>Join our 3-month immersive program.</p>
+    </div>
+    <div class="join-card" onclick="showPage('skills')">
+      <span class="arrow">↗</span>
+      <div class="join-icon">✦</div>
+      <h3>Contribute Skills</h3>
+      <p>Design, write, build — pro-bono.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-badge">CONTACT</div>
+  <h2 class="section-title">Let's <em>talk.</em></h2>
+  <p class="section-sub" style="margin:0 auto 0">Partnerships, press, volunteering or just to say hi — we'd love to hear from you.</p>
+  <div class="contact-cards">
+    <div class="contact-card">
+      <div class="contact-icon">✉</div>
+      <div class="contact-label">EMAIL</div>
+      <div class="contact-value">hello@shecanfoundation.org</div>
+    </div>
+    <div class="contact-card">
+      <div class="contact-icon">📞</div>
+      <div class="contact-label">PHONE</div>
+      <div class="contact-value">+91 98765 43210</div>
+    </div>
+    <div class="contact-card">
+      <div class="contact-icon">🌐</div>
+      <div class="contact-label">WEBSITE</div>
+      <div class="contact-value">shecanfoundation.org</div>
+    </div>
+    <div class="contact-card">
+      <div class="contact-icon">📸</div>
+      <div class="contact-label">SOCIAL</div>
+      <div class="contact-value">@shecan.foundation</div>
+    </div>
+  </div>
+
+  <!-- CONTACT FORM -->
+  <div id="contact-form-wrap" style="max-width:600px;margin:60px auto 0;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:48px 40px;">
+    <h3 style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;margin-bottom:8px;">Send us a <em style="color:var(--orange);font-style:italic;">message</em></h3>
+    <p style="color:var(--muted);font-size:15px;margin-bottom:32px;">We'll get back to you within 24 hours.</p>
+    <div id="form-success" style="display:none;text-align:center;padding:32px 0;">
+      <div style="font-size:48px;margin-bottom:16px;">✅</div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:24px;margin-bottom:8px;">Message Sent!</h3>
+      <p style="color:var(--muted);font-size:15px;">Thank you! We'll be in touch soon.</p>
+    </div>
+    <div id="form-fields">
+      <div style="margin-bottom:20px;">
+        <label style="display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Full Name *</label>
+        <input id="cf-name" type="text" placeholder="Your name" style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;color:var(--white);font-size:15px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='var(--orange)'" onblur="this.style.borderColor='var(--border)'">
+        <div id="err-name" style="color:#f97316;font-size:12px;margin-top:4px;display:none;">Name is required.</div>
+      </div>
+      <div style="margin-bottom:20px;">
+        <label style="display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Email Address *</label>
+        <input id="cf-email" type="email" placeholder="you@email.com" style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;color:var(--white);font-size:15px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='var(--orange)'" onblur="this.style.borderColor='var(--border)'">
+        <div id="err-email" style="color:#f97316;font-size:12px;margin-top:4px;display:none;">Valid email is required.</div>
+      </div>
+      <div style="margin-bottom:28px;">
+        <label style="display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Message *</label>
+        <textarea id="cf-msg" rows="5" placeholder="Your message..." style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;color:var(--white);font-size:15px;font-family:'DM Sans',sans-serif;outline:none;resize:vertical;transition:border-color .2s;" onfocus="this.style.borderColor='var(--orange)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+        <div id="err-msg" style="color:#f97316;font-size:12px;margin-top:4px;display:none;">Message is required.</div>
+      </div>
+      <button id="cf-submit" onclick="submitContactForm()" style="width:100%;background:var(--orange);color:#fff;border:none;border-radius:50px;padding:15px 28px;font-size:16px;font-weight:600;cursor:pointer;transition:background .2s,transform .15s;" onmouseover="this.style.background='var(--orange-dark)'" onmouseout="this.style.background='var(--orange)'">♥ Send Message</button>
+      <div id="form-error" style="display:none;margin-top:14px;color:#f97316;font-size:14px;text-align:center;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <div class="icon" style="width:36px;height:36px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px">♥</div>
+        <div><div class="name">She Can</div><span class="sub">FOUNDATION</span></div>
+      </div>
+      <p>A non-profit organization empowering women and uplifting communities across India through education, dignity and opportunity.</p>
+      <div class="footer-reg">REGISTERED · INDIAN SOCIETY ACT, 1860</div>
+      <div class="footer-social">
+        <div class="social-icon">📸</div>
+        <div class="social-icon">🐦</div>
+        <div class="social-icon">💼</div>
+        <div class="social-icon">📘</div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>EXPLORE</h4>
+      <ul>
+        <li><a onclick="showPage('main');smoothTo('home')">Home</a></li>
+        <li><a onclick="showPage('main');smoothTo('about')">About</a></li>
+        <li><a onclick="showPage('main');smoothTo('programs')">Programs</a></li>
+        <li><a onclick="showPage('main');smoothTo('campaign')">Campaign</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>ENGAGE</h4>
+      <ul>
+        <li><a onclick="openDonateModal()">Donate</a></li>
+        <li><a onclick="showPage('volunteer')">Volunteer</a></li>
+        <li><a onclick="showPage('intern')">Intern</a></li>
+        <li><a onclick="showPage('partner')">Partner</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>RESOURCES</h4>
+      <ul>
+        <li><a onclick="showPage('annual-report')">Annual Report</a></li>
+        <li><a onclick="showPage('press')">Press</a></li>
+        <li><a onclick="showPage('stories')">Stories</a></li>
+        <li><a onclick="showPage('main');smoothTo('contact')">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 She Can Foundation. All rights reserved.</p>
+    <span class="admin-link" onclick="openAdminPanel()">Admin</span>
+    <div class="made-with">Made with <span>♥</span> in India</div>
+  </div>
+</footer>
+
+</div><!-- end #main-site -->
+
+
+<!-- ══════════════════════════════════════════ DONATE MODAL ══════════════════════════════════════════ -->
+<div id="donate-modal">
+  <div class="donate-modal-inner">
+    <div class="donate-modal-header">
+      <div>
+        <div class="section-badge" style="margin-bottom:12px">DONATE</div>
+        <h2 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;">Make a <em style="color:var(--orange);font-style:italic;">Difference</em> Today</h2>
+      </div>
+      <button class="modal-close" onclick="closeDonateModal()">✕ Close</button>
+    </div>
+
+    <div id="donate-form-success" class="form-success-wrap">
+      <div class="success-icon-wrap">🧡</div>
+      <div class="donate-success-badge">✓ Donation Submitted Successfully</div>
+      <h3>Thank You for Your Support!</h3>
+      <p>Your generosity will directly help girls stay in school and live with dignity. A confirmation has been recorded and you'll hear from us soon.</p>
+      <button class="btn-primary" style="margin:0 auto;display:inline-flex;" onclick="closeDonateModal()">← Back to Site</button>
+    </div>
+
+    <div id="donate-form-body">
+      <p style="color:var(--muted);font-size:14px;margin-bottom:24px;">Choose an amount or enter a custom donation:</p>
+      <div class="donate-tiers">
+        <div class="donate-tier active" onclick="setDonationTier(this,'500')">
+          <div class="tier-amount">₹500</div>
+          <div class="tier-desc">Hygiene kit for one girl</div>
+        </div>
+        <div class="donate-tier" onclick="setDonationTier(this,'1500')">
+          <div class="tier-amount">₹1,500</div>
+          <div class="tier-desc">1 month of education support</div>
+        </div>
+        <div class="donate-tier" onclick="setDonationTier(this,'5000')">
+          <div class="tier-amount">₹5,000</div>
+          <div class="tier-desc">Village workshop sponsor</div>
+        </div>
+        <div class="donate-tier" onclick="setDonationTier(this,'10000')">
+          <div class="tier-amount">₹10,000</div>
+          <div class="tier-desc">Full school year sponsor</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Custom Amount (₹)</label>
+        <div class="custom-amount-input">
+          <span>₹</span>
+          <input id="donate-amount" type="number" placeholder="Enter amount" value="500" min="100">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input id="donate-name" type="text" placeholder="Your full name">
+        </div>
+        <div class="form-group">
+          <label>Email Address *</label>
+          <input id="donate-email" type="email" placeholder="you@email.com">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Phone (optional)</label>
+        <input id="donate-phone" type="tel" placeholder="+91 XXXXX XXXXX">
+      </div>
+
+      <div class="form-group">
+        <label>Donate towards</label>
+        <select id="donate-cause">
+          <option>Menstrual Health & Dignity</option>
+          <option>Education Access</option>
+          <option>Digital Skills Internship</option>
+          <option>Campus Ambassador Program</option>
+          <option>General Fund — Where Needed Most</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom:24px;">
+        <label style="display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Payment Method</label>
+        <div class="payment-methods">
+          <div class="pay-method active" onclick="setPayMethod(this)">📱 UPI</div>
+          <div class="pay-method" onclick="setPayMethod(this)">💳 Card</div>
+          <div class="pay-method" onclick="setPayMethod(this)">🏦 Net Banking</div>
+          <div class="pay-method" onclick="setPayMethod(this)">💵 Cheque/DD</div>
+        </div>
+      </div>
+
+      <div id="upi-block" style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:24px;text-align:center;">
+        <div style="font-size:13px;color:var(--muted);margin-bottom:10px;">Scan QR or pay to UPI ID</div>
+        <div style="font-size:22px;font-weight:700;font-family:'Playfair Display',serif;color:var(--orange);margin-bottom:6px;">shecan@upi</div>
+        <div style="font-size:12px;color:var(--muted);">After payment, click confirm below</div>
+      </div>
+
+      <div id="donate-err" style="display:none;color:#f87171;font-size:13px;margin-bottom:12px;"></div>
+      <button id="donate-submit" onclick="submitDonation()" style="width:100%;background:var(--orange);color:#fff;border:none;border-radius:50px;padding:16px 28px;font-size:16px;font-weight:600;cursor:pointer;transition:background .2s;" onmouseover="this.style.background='var(--orange-dark)'" onmouseout="this.style.background='var(--orange)'">♥ Confirm Donation</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════ PROGRAM PAGES ══════════════════════════════════════════ -->
+
+<!-- Menstrual Health -->
+<div id="prog-menstrual" class="page subpage">
+  <div class="subpage-hero">
+    <img src="https://images.unsplash.com/photo-1599059813005-11265ba4b4ce?w=1400&q=80&fit=crop&crop=center" alt="Menstrual health program">
+    <div class="subpage-hero-overlay"></div>
+    <div class="subpage-hero-content">
+      <div class="section-badge">PROGRAM</div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:clamp(36px,4vw,60px);font-weight:900;line-height:1.1;margin-top:12px;">Menstrual Health <em style="color:var(--orange);font-style:italic;">&amp; Dignity</em></h1>
+    </div>
+  </div>
+  <div class="subpage-body">
+    <span class="back-btn" onclick="showPage('main');smoothTo('programs')">← Back to Programs</span>
+    <div class="prog-detail-grid">
+      <div>
+        <p style="color:#b0bac8;font-size:17px;line-height:1.8;margin-bottom:20px;">Menstruation is a natural biological process, yet it remains a source of shame, exclusion and missed opportunities for millions of girls in India. She Can Foundation's flagship initiative addresses this through a comprehensive, community-driven approach.</p>
+        <p style="color:#b0bac8;font-size:17px;line-height:1.8;margin-bottom:32px;">We distribute reusable sanitary pads, hygiene kits, and run taboo-breaking workshops in schools and villages — creating safe spaces where girls can learn, ask questions, and reclaim their dignity.</p>
+        <div class="prog-detail-stats">
+          <div class="prog-stat-card"><div class="stat-v">1,20,000+</div><div class="stat-l">Girls reached</div></div>
+          <div class="prog-stat-card"><div class="stat-v">200+</div><div class="stat-l">Schools covered</div></div>
+          <div class="prog-stat-card"><div class="stat-v">50+</div><div class="stat-l">Village workshops</div></div>
+          <div class="prog-stat-card"><div class="stat-v">10+</div><div class="stat-l">States active</div></div>
+        </div>
+      </div>
+      <div class="prog-detail-img">
+        <img src="https://images.unsplash.com/photo-1604881991720-f91add269bed?w=800&q=80&fit=crop" alt="Women health education">
+      </div>
+    </div>
+    <h3 style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;margin-bottom:20px;">What We Do</h3>
+    <div class="impact-list">
+      <div class="impact-item"><div class="ii-icon">🩺</div><div class="ii-text">Free distribution of reusable menstrual hygiene kits to girls from low-income households</div></div>
+      <div class="impact-item"><div class="ii-icon">🏫</div><div class="ii-text">Menstrual health education workshops in schools, addressing myths and promoting hygiene</div></div>
+      <div class="impact-item"><div class="ii-icon">👩‍👧</div><div class="ii-text">Parent and community sensitisation sessions to break generational taboos</div></div>
+      <div class="impact-item"><div class="ii-icon">📦</div><div class="ii-text">Emergency pad banks in schools so no girl misses class due to lack of supplies</div></div>
+    </div>
+    <div style="margin-top:40px;">
+      <button class="btn-primary" onclick="openDonateModal()">♥ Support This Program</button>
+    </div>
+  </div>
+</div>
+
+<!-- Digital Skills -->
+<div id="prog-digital" class="page subpage">
+  <div class="subpage-hero">
+    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1400&q=80&fit=crop&crop=center" alt="Digital skills training">
+    <div class="subpage-hero-overlay"></div>
+    <div class="subpage-hero-content">
+      <div class="section-badge">PROGRAM</div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:clamp(36px,4vw,60px);font-weight:900;line-height:1.1;margin-top:12px;">Digital Skills <em style="color:var(--orange);font-style:italic;">Internship</em></h1>
+    </div>
+  </div>
+  <div class="subpage-body">
+    <span class="back-btn" onclick="showPage('main');smoothTo('programs')">← Back to Programs</span>
+    <div class="prog-detail-grid">
+      <div>
+        <p style="color:#b0bac8;font-size:17px;line-height:1.8;margin-bottom:20px;">The digital economy is the fastest path to financial independence for young women. Our 3-month immersive internship program equips women aged 18–28 with practical skills in design, marketing, content creation and technology.</p>
+        <p style="color:#b0bac8;font-size:17px;line-height:1.8;margin-bottom:32px;">Participants work on real projects, get mentored by industry professionals, and graduate with a portfolio and verified certification — ready for the modern workforce.</p>
+        <div class="prog-detail-stats">
+          <div class="prog-stat-card"><div class="stat-v">500+</div><div class="stat-l">Interns trained</div></div>
+          <div class="prog-stat-card"><div class="stat-v">3 mo.</div><div class="stat-l">Program duration</div></div>
+          <div class="prog-stat-card"><div class="stat-v">78%</div><div class="stat-l">Placement rate</div></div>
+          <div class="prog-stat-card"><div class="stat-v">20+</div><div class="stat-l">Partner companies</div></div>
+        </div>
+      </div>
+      <div class="prog-detail-img">
+        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80&fit=crop" alt="Women learning digital skills">
+      </div>
+    </div>
+    <h3 style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;margin-bottom:20px;">Skills We Teach</h3>
+    <div class="roles-grid">
+      <div class="role-card"><div class="tag">DESIGN</div><h4>UI/UX & Graphic Design</h4><p>Figma, Canva, visual communication fundamentals</p></div>
+      <div class="role-card"><div class="tag">MARKETING</div><h4>Digital Marketing</h4><p>Social media, SEO, email campaigns, analytics</p></div>
+      <div class="role-card"><div class="tag">CONTENT</div><h4>Content Creation</h4><p>Copywriting, video editing, storytelling</p></div>
+      <div class="role-card"><div class="tag">TECH</div><h4>Web Basics & Coding</h4><p>HTML/CSS fundamentals, no-code tools, data sheets</p></div>
+      <div class="role-card"><div class="tag">FINANCE</div><h4>Financial Literacy</h4><p>Budgeting, savings, freelancing, entrepreneurship</p></div>
+      <div class="role-card"><div class="tag">SOFT SKILLS</div><h4>Professional Development</h4><p>Communication, interviews, resume building</p></div>
+    </div>
+    <div style="margin-top:20px;">
+      <button class="btn-primary" onclick="showPage('intern')">Apply for Internship →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Education Access -->
+<div id="prog-education" class="page subpage">
+  <div class="subpage-hero">
+    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1400&q=80&fit=crop&crop=center" alt="Education access program">
+    <div class="subpage-hero-overlay"></div>
+    <div class="subpage-hero-content">
+      <div class="section-badge">PROGRAM</div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:clamp(36px,4vw,60px);font-weight:900;line-height:1.1;margin-top:12px;">Education <em style="color:var(--orange);font-style:italic;">Access</em></h1>
+    </div>
+  </div>
+  <div class="subpage-body">
+    <span class="back-btn" onclick="showPage('main');smoothTo('programs')">← Back to Programs</span>
+    <div class="prog-detail-grid">
+      <div>
+        <p style="color:#b0bac8;font-size:17px;line-height:1.8;margin-bottom:20px;">Education is the most powerful tool to break cycles of poverty. Yet every year, hundreds of thousands of girls in India drop out due to financial pressure, distance, or cultural barriers. She Can Foundation is committed to reversing this.</p>
+        <p style="color:#b0bac8;font-size:17px;line-height:1.8;margin-bottom:32px;">We provide scholarships, learning materials, mentorship and emotional support — from primary school to college — so no girl is ever forced out of her classroom.</p>
+        <div class="prog-detail-stats">
+          <div class="prog-stat-card"><div class="stat-v">3,400+</div><div class="stat-l">Scholarships awarded</div></div>
+          <div class="prog-stat-card"><div class="stat-v">94%</div><div class="stat-l">Retention rate</div></div>
+          <div class="prog-stat-card"><div class="stat-v">₹2.8Cr</div><div class="stat-l">Aid disbursed</div></div>
+          <div class="prog-stat-card"><div class="stat-v">15+</div><div class="stat-l">Partner schools</div></div>
+        </div>
+      </div>
+      <div class="prog-detail-img">
+        <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?w=800&q=80&fit=crop" alt="Girls in classroom">
+      </div>
+    </div>
+    <div class="impact-list">
+      <div class="impact-item"><div class="ii-icon">📖</div><div class="ii-text">Merit-cum-need scholarships covering tuition, books, and exam fees</div></div>
+      <div class="impact-item"><div class="ii-icon">🚌</div><div class="ii-text">Transportation support for girls in remote areas</div></div>
+      <div class="impact-item"><div class="ii-icon">👩‍🏫</div><div class="ii-text">Dedicated mentors for academic guidance and emotional support</div></div>
+      <div class="impact-item"><div class="ii-icon">💻</div><div class="ii-text">Device and internet access for digital learning</div></div>
+    </div>
+    <div style="margin-top:40px;">
+      <button class="btn-primary" onclick="openDonateModal()">♥ Sponsor a Girl's Education</button>
+    </div>
+  </div>
+</div>
+
+<!-- Campus Ambassador -->
+<div id="prog-campus" class="page subpage">
+  <div class="subpage-hero">
+    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1400&q=80&fit=crop&crop=center" alt="Campus ambassador program">
+    <div class="subpage-hero-overlay"></div>
+    <div class="subpage-hero-content">
+      <div class="section-badge">PROGRAM</div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:clamp(36px,4vw,60px);font-weight:900;line-height:1.1;margin-top:12px;">Campus Ambassador <em style="color:var(--orange);font-style:italic;">Program</em></h1>
+    </div>
+  </div>
+  <div class="subpage-body">
+    <span class="back-btn" onclick="showPage('main');smoothTo('programs')">← Back to Programs</span>
+    <div class="prog-detail-grid">
+      <div>
+        <p style="color:#b0bac8;font-size:17px;line-height:1.8;margin-bottom:20px;">Change starts on campus. Our Campus Ambassador Program turns passionate college students into powerful advocates for women's rights, menstrual health, and education access across India.</p>
+        <p style="color:#b0bac8;font-size:17px;line-height:1.8;margin-bottom:32px;">Ambassadors lead campus drives, fundraise, and represent She Can Foundation — gaining leadership experience while creating real impact in their communities.</p>
+        <div class="prog-detail-stats">
+          <div class="prog-stat-card"><div class="stat-v">800+</div><div class="stat-l">Active ambassadors</div></div>
+          <div class="prog-stat-card"><div class="stat-v">120+</div><div class="stat-l">Colleges</div></div>
+          <div class="prog-stat-card"><div class="stat-v">18</div><div class="stat-l">States represented</div></div>
+          <div class="prog-stat-card"><div class="stat-v">300+</div><div class="stat-l">Drives organized</div></div>
+        </div>
+      </div>
+      <div class="prog-detail-img">
+        <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80&fit=crop" alt="Students leading campaigns">
+      </div>
+    </div>
+    <div class="impact-list">
+      <div class="impact-item"><div class="ii-icon">🎙️</div><div class="ii-text">Organize awareness campaigns and fundraising drives on your campus</div></div>
+      <div class="impact-item"><div class="ii-icon">🏅</div><div class="ii-text">Earn a verified certificate and She Can Foundation letter of recommendation</div></div>
+      <div class="impact-item"><div class="ii-icon">🤝</div><div class="ii-text">Join a national network of changemakers and collaborate on projects</div></div>
+      <div class="impact-item"><div class="ii-icon">📊</div><div class="ii-text">Gain real-world leadership, communication and project management skills</div></div>
+    </div>
+    <div style="margin-top:40px;">
+      <button class="btn-primary" onclick="showPage('intern')">Apply as Ambassador →</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════ JOIN PAGES ══════════════════════════════════════════ -->
+
+<!-- VOLUNTEER -->
+<div id="volunteer" class="page subpage">
+  <div class="subpage-hero">
+    <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1400&q=80&fit=crop&crop=center" alt="Volunteering">
+    <div class="subpage-hero-overlay"></div>
+    <div class="subpage-hero-content">
+      <div class="section-badge">GET INVOLVED</div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:clamp(36px,4vw,60px);font-weight:900;line-height:1.1;margin-top:12px;">Volunteer With <em style="color:var(--orange);font-style:italic;">Us</em></h1>
+    </div>
+  </div>
+  <div class="subpage-body">
+    <span class="back-btn" onclick="showPage('main');smoothTo('join')">← Back</span>
+    <div class="vol-intro">
+      <div>
+        <div class="section-badge" style="margin-bottom:20px;">VOLUNTEER</div>
+        <p style="color:#b0bac8;font-size:17px;line-height:1.8;margin-bottom:24px;">Your time is one of the most valuable gifts you can offer. Whether it's a weekend or a few hours a week, every volunteer contribution moves us closer to a world where no girl is left behind.</p>
+        <p style="color:#b0bac8;font-size:17px;line-height:1.8;margin-bottom:32px;">Volunteers support our ground campaigns, distribution drives, digital outreach, and event management. No matter where you are in India, there's a way to get involved.</p>
+      </div>
+      <div class="vol-intro-img">
+        <img src="https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=800&q=80&fit=crop" alt="Volunteers at work">
+      </div>
+    </div>
+    <h3 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:20px;">Volunteer Roles</h3>
+    <div class="roles-grid" style="margin-bottom:48px;">
+      <div class="role-card"><div class="tag">FIELD</div><h4>Ground Campaigner</h4><p>Join distribution drives and awareness campaigns in your city</p></div>
+      <div class="role-card"><div class="tag">DIGITAL</div><h4>Social Media Volunteer</h4><p>Create content, manage posts and grow our digital presence</p></div>
+      <div class="role-card"><div class="tag">EVENTS</div><h4>Event Coordinator</h4><p>Help organise fundraisers, workshops and awareness events</p></div>
+      <div class="role-card"><div class="tag">EDUCATION</div><h4>Tutor / Mentor</h4><p>Provide academic support to scholarship beneficiaries</p></div>
+      <div class="role-card"><div class="tag">RESEARCH</div><h4>Research Volunteer</h4><p>Assist with surveys, impact studies and documentation</p></div>
+      <div class="role-card"><div class="tag">COMMS</div><h4>Translation Volunteer</h4><p>Help translate materials to regional languages</p></div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:48px 40px;max-width:700px;">
+      <h3 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:24px;">Volunteer Application</h3>
+      <div id="vol-success" class="form-success-wrap"><div style="font-size:48px;margin-bottom:16px;">🙌</div><h3 style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:8px;">Application Received!</h3><p style="color:var(--muted);font-size:15px;">We'll reach out within 3-5 business days.</p></div>
+      <div id="vol-form">
+        <div class="form-row">
+          <div class="form-group"><label>Full Name *</label><input id="vol-name" type="text" placeholder="Your name"></div>
+          <div class="form-group"><label>Email *</label><input id="vol-email" type="email" placeholder="you@email.com"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Phone</label><input id="vol-phone" type="tel" placeholder="+91 XXXXX XXXXX"></div>
+          <div class="form-group"><label>City</label><input id="vol-city" type="text" placeholder="Your city"></div>
+        </div>
+        <div class="form-group">
+          <label>Preferred Role</label>
+          <select id="vol-role">
+            <option>Ground Campaigner</option>
+            <option>Social Media Volunteer</option>
+            <option>Event Coordinator</option>
+            <option>Tutor / Mentor</option>
+            <option>Research Volunteer</option>
+            <option>Translation Volunteer</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Why do you want to volunteer?</label>
+          <textarea id="vol-why" rows="4" placeholder="Tell us your motivation..."></textarea>
+        </div>
+        <div id="vol-err" style="display:none;color:#f87171;font-size:13px;margin-bottom:12px;"></div>
+        <button onclick="submitVolunteer()" style="background:var(--orange);color:#fff;border:none;border-radius:50px;padding:14px 32px;font-size:15px;font-weight:600;cursor:pointer;width:100%;transition:background .2s;" onmouseover="this.style.background='var(--orange-dark)'" onmouseout="this.style.background='var(--orange)'">Submit Application</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INTERN -->
+<div id="intern" class="page subpage">
+  <div class="subpage-hero">
+    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1400&q=80&fit=crop&crop=center" alt="Internship program">
+    <div class="subpage-hero-overlay"></div>
+    <div class="subpage-hero-content">
+      <div class="section-badge">INTERNSHIP</div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:clamp(36px,4vw,60px);font-weight:900;line-height:1.1;margin-top:12px;">Intern at <em style="color:var(--orange);font-style:italic;">She Can</em></h1>
+    </div>
+  </div>
+  <div class="subpage-body">
+    <span class="back-btn" onclick="showPage('main');smoothTo('join')">← Back</span>
+    <div class="vol-intro">
+      <div>
+        <p style="color:#b0bac8;font-size:17px;line-height:1.8;margin-bottom:24px;">Join our 3-month immersive internship and become part of a mission-driven team. You'll gain hands-on experience in NGO operations, campaigns, and digital growth — while creating real change for women across India.</p>
+        <p style="color:#b0bac8;font-size:17px;line-height:1.8;margin-bottom:32px;">Stipend available. Certificate provided. Letters of recommendation for top performers. Open to undergraduate and postgraduate students.</p>
+        <div class="prog-detail-stats" style="margin-top:0;">
+          <div class="prog-stat-card"><div class="stat-v">3 mo.</div><div class="stat-l">Duration</div></div>
+          <div class="prog-stat-card"><div class="stat-v">Remote</div><div class="stat-l">Work mode</div></div>
+          <div class="prog-stat-card"><div class="stat-v">500+</div><div class="stat-l">Alumni</div></div>
+          <div class="prog-stat-card"><div class="stat-v">Stipend</div><div class="stat-l">Available</div></div>
+        </div>
+      </div>
+      <div class="vol-intro-img">
+        <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80&fit=crop" alt="Interns working">
+      </div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:48px 40px;max-width:700px;">
+      <h3 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:24px;">Internship Application</h3>
+      <div id="intern-success" class="form-success-wrap"><div style="font-size:48px;margin-bottom:16px;">🎓</div><h3 style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:8px;">Application Submitted!</h3><p style="color:var(--muted);font-size:15px;">Our team will review and respond within 5 working days.</p></div>
+      <div id="intern-form">
+        <div class="form-row">
+          <div class="form-group"><label>Full Name *</label><input id="int-name" type="text" placeholder="Your name"></div>
+          <div class="form-group"><label>Email *</label><input id="int-email" type="email" placeholder="you@email.com"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>College/University</label><input id="int-college" type="text" placeholder="Your institution"></div>
+          <div class="form-group"><label>Course & Year</label><input id="int-course" type="text" placeholder="e.g. BBA 2nd Year"></div>
+        </div>
+        <div class="form-group">
+          <label>Department/Interest Area</label>
+          <select id="int-dept">
+            <option>Digital Marketing & Social Media</option>
+            <option>Design & Visual Communication</option>
+            <option>Content Writing & Storytelling</option>
+            <option>Technology & Web Development</option>
+            <option>HR & Operations</option>
+            <option>Research & Impact Assessment</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Availability (start date)</label>
+          <input id="int-start" type="date">
+        </div>
+        <div class="form-group">
+          <label>Why She Can? What will you contribute?</label>
+          <textarea id="int-why" rows="4" placeholder="Share your motivation and skills..."></textarea>
+        </div>
+        <div id="int-err" style="display:none;color:#f87171;font-size:13px;margin-bottom:12px;"></div>
+        <button onclick="submitIntern()" style="background:var(--orange);color:#fff;border:none;border-radius:50px;padding:14px 32px;font-size:15px;font-weight:600;cursor:pointer;width:100%;transition:background .2s;" onmouseover="this.style.background='var(--orange-dark)'" onmouseout="this.style.background='var(--orange)'">Submit Application</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTRIBUTE SKILLS -->
+<div id="skills" class="page subpage">
+  <div class="subpage-hero">
+    <img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1400&q=80&fit=crop&crop=center" alt="Contribute skills">
+    <div class="subpage-hero-overlay"></div>
+    <div class="subpage-hero-content">
+      <div class="section-badge">PRO-BONO</div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:clamp(36px,4vw,60px);font-weight:900;line-height:1.1;margin-top:12px;">Contribute Your <em style="color:var(--orange);font-style:italic;">Skills</em></h1>
+    </div>
+  </div>
+  <div class="subpage-body">
+    <span class="back-btn" onclick="showPage('main');smoothTo('join')">← Back</span>
+    <p style="color:#b0bac8;font-size:17px;line-height:1.8;margin-bottom:40px;max-width:700px;">Professionals, freelancers and agencies can contribute their expertise on a pro-bono basis. Your skills could help build our digital presence, create campaigns, or improve our systems — multiplying impact without monetary donation.</p>
+    <div class="roles-grid" style="margin-bottom:48px;">
+      <div class="role-card"><div class="tag">DESIGN</div><h4>Graphic Design</h4><p>Posters, social graphics, brand assets</p></div>
+      <div class="role-card"><div class="tag">WEB</div><h4>Web Development</h4><p>Website features, maintenance, tools</p></div>
+      <div class="role-card"><div class="tag">WRITING</div><h4>Copywriting</h4><p>Website copy, fundraising content, reports</p></div>
+      <div class="role-card"><div class="tag">VIDEO</div><h4>Video Production</h4><p>Impact films, reels, testimonial videos</p></div>
+      <div class="role-card"><div class="tag">LEGAL</div><h4>Legal Counsel</h4><p>Pro-bono legal advice and compliance</p></div>
+      <div class="role-card"><div class="tag">FINANCE</div><h4>Accounting & Audit</h4><p>Financial review, bookkeeping support</p></div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:48px 40px;max-width:700px;">
+      <h3 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:24px;">Get in Touch</h3>
+      <div id="skills-success" class="form-success-wrap"><div style="font-size:48px;margin-bottom:16px;">✦</div><h3 style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:8px;">We'll be in touch!</h3><p style="color:var(--muted);font-size:15px;">Thank you for offering your skills. Expect a response within 48 hours.</p></div>
+      <div id="skills-form">
+        <div class="form-row">
+          <div class="form-group"><label>Name *</label><input id="sk-name" type="text" placeholder="Your name"></div>
+          <div class="form-group"><label>Email *</label><input id="sk-email" type="email" placeholder="you@email.com"></div>
+        </div>
+        <div class="form-group"><label>Skill Area</label><input id="sk-skill" type="text" placeholder="e.g. Graphic Design, Legal, Web Dev"></div>
+        <div class="form-group"><label>Portfolio / LinkedIn (optional)</label><input id="sk-portfolio" type="url" placeholder="https://..."></div>
+        <div class="form-group"><label>How can you help?</label><textarea id="sk-msg" rows="4" placeholder="Describe your offer..."></textarea></div>
+        <div id="sk-err" style="display:none;color:#f87171;font-size:13px;margin-bottom:12px;"></div>
+        <button onclick="submitSkills()" style="background:var(--orange);color:#fff;border:none;border-radius:50px;padding:14px 32px;font-size:15px;font-weight:600;cursor:pointer;width:100%;transition:background .2s;" onmouseover="this.style.background='var(--orange-dark)'" onmouseout="this.style.background='var(--orange)'">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PARTNER -->
+<div id="partner" class="page subpage">
+  <div class="subpage-hero">
+    <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1400&q=80&fit=crop&crop=center" alt="Corporate partnership">
+    <div class="subpage-hero-overlay"></div>
+    <div class="subpage-hero-content">
+      <div class="section-badge">PARTNERSHIPS</div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:clamp(36px,4vw,60px);font-weight:900;line-height:1.1;margin-top:12px;">Partner With <em style="color:var(--orange);font-style:italic;">She Can</em></h1>
+    </div>
+  </div>
+  <div class="subpage-body">
+    <span class="back-btn" onclick="showPage('main');smoothTo('join')">← Back</span>
+    <p style="color:#b0bac8;font-size:17px;line-height:1.8;margin-bottom:40px;max-width:700px;">Corporate partnerships amplify our impact exponentially. Whether through CSR funding, employee volunteering, or in-kind support — your organisation can help thousands of girls achieve their potential.</p>
+    <div class="partner-tiers">
+      <div class="partner-tier"><div class="partner-tier-icon">🥉</div><div><h3>Community Partner</h3><p>₹1L – ₹5L CSR contribution. Logo recognition, impact report, 2 volunteering days</p></div><div class="tier-badge">Entry Level</div></div>
+      <div class="partner-tier" style="border-color:var(--orange)"><div class="partner-tier-icon">🥈</div><div><h3>Impact Partner</h3><p>₹5L – ₹20L. Co-branded campaigns, internship pipeline, quarterly updates, site visits</p></div><div class="tier-badge">Popular</div></div>
+      <div class="partner-tier"><div class="partner-tier-icon">🥇</div><div><h3>Founding Partner</h3><p>₹20L+. Naming rights on a program, board observer seat, custom impact dashboards</p></div><div class="tier-badge">Premium</div></div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:48px 40px;max-width:700px;">
+      <h3 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:24px;">Partnership Enquiry</h3>
+      <div id="partner-success" class="form-success-wrap"><div style="font-size:48px;margin-bottom:16px;">🤝</div><h3 style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:8px;">Enquiry Received!</h3><p style="color:var(--muted);font-size:15px;">Our partnerships team will contact you within 48 hours.</p></div>
+      <div id="partner-form">
+        <div class="form-row">
+          <div class="form-group"><label>Contact Name *</label><input id="pt-name" type="text" placeholder="Your name"></div>
+          <div class="form-group"><label>Company Name *</label><input id="pt-company" type="text" placeholder="Organisation"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Email *</label><input id="pt-email" type="email" placeholder="work@company.com"></div>
+          <div class="form-group"><label>Phone</label><input id="pt-phone" type="tel" placeholder="+91 XXXXX XXXXX"></div>
+        </div>
+        <div class="form-group">
+          <label>Partnership Interest</label>
+          <select id="pt-type">
+            <option>Community Partner (₹1L – ₹5L)</option>
+            <option>Impact Partner (₹5L – ₹20L)</option>
+            <option>Founding Partner (₹20L+)</option>
+            <option>Employee Volunteering</option>
+            <option>In-kind / Product Donation</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Message</label><textarea id="pt-msg" rows="4" placeholder="Tell us about your CSR goals..."></textarea></div>
+        <div id="pt-err" style="display:none;color:#f87171;font-size:13px;margin-bottom:12px;"></div>
+        <button onclick="submitPartner()" style="background:var(--orange);color:#fff;border:none;border-radius:50px;padding:14px 32px;font-size:15px;font-weight:600;cursor:pointer;width:100%;transition:background .2s;" onmouseover="this.style.background='var(--orange-dark)'" onmouseout="this.style.background='var(--orange)'">Send Enquiry</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════ RESOURCE PAGES ══════════════════════════════════════════ -->
+
+<!-- ANNUAL REPORT -->
+<div id="annual-report" class="page subpage">
+  <div class="subpage-hero" style="height:300px;background:var(--card2);">
+    <div class="subpage-hero-overlay" style="background:linear-gradient(to top,rgba(13,17,23,0.95) 0%,transparent 100%)"></div>
+    <div class="subpage-hero-content">
+      <div class="section-badge">RESOURCES</div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,56px);font-weight:900;line-height:1.1;margin-top:12px;">Annual <em style="color:var(--orange);font-style:italic;">Reports</em></h1>
+    </div>
+  </div>
+  <div class="subpage-body">
+    <span class="back-btn" onclick="showPage('main')">← Back to Home</span>
+    <p style="color:var(--muted);font-size:17px;margin-bottom:40px;max-width:600px;">Transparency is at the heart of She Can Foundation. Our annual reports detail how every rupee is spent and the lives it touches.</p>
+    <div class="resource-grid">
+      <div class="resource-card"><div class="rc-icon">📄</div><h3>Annual Report 2025</h3><p>Full financial breakdown, impact metrics, and program highlights from our most impactful year.</p><div style="margin-top:20px;"><button class="btn-primary" style="font-size:13px;padding:10px 20px;">Download PDF</button></div></div>
+      <div class="resource-card"><div class="rc-icon">📄</div><h3>Annual Report 2024</h3><p>How we reached 80,000+ girls across 8 states in 2024, with detailed accounts and impact stories.</p><div style="margin-top:20px;"><button class="btn-primary" style="font-size:13px;padding:10px 20px;">Download PDF</button></div></div>
+      <div class="resource-card"><div class="rc-icon">📄</div><h3>Annual Report 2023</h3><p>Our founding year's milestones — how She Can began and the first 10,000 girls we helped.</p><div style="margin-top:20px;"><button class="btn-primary" style="font-size:13px;padding:10px 20px;">Download PDF</button></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRESS -->
+<div id="press" class="page subpage">
+  <div class="subpage-hero" style="height:300px;background:var(--card2);">
+    <div class="subpage-hero-overlay" style="background:linear-gradient(to top,rgba(13,17,23,0.95) 0%,transparent 100%)"></div>
+    <div class="subpage-hero-content">
+      <div class="section-badge">MEDIA</div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,56px);font-weight:900;line-height:1.1;margin-top:12px;">Press & <em style="color:var(--orange);font-style:italic;">Media</em></h1>
+    </div>
+  </div>
+  <div class="subpage-body">
+    <span class="back-btn" onclick="showPage('main')">← Back to Home</span>
+    <p style="color:var(--muted);font-size:17px;margin-bottom:16px;max-width:600px;">For media enquiries, press kit downloads, or interview requests, contact us at <span style="color:var(--orange)">press@shecanfoundation.org</span></p>
+    <div class="resource-grid" style="margin-top:40px;">
+      <div class="resource-card"><div class="rc-icon">📰</div><h3>Press Kit</h3><p>Logos, brand assets, founder bios, and approved photographs for media use.</p><div style="margin-top:20px;"><button class="btn-primary" style="font-size:13px;padding:10px 20px;">Download Kit</button></div></div>
+      <div class="resource-card"><div class="rc-icon">🎙️</div><h3>Media Coverage</h3><p>She Can Foundation has been featured in The Hindu, NDTV, YourStory and more.</p></div>
+      <div class="resource-card"><div class="rc-icon">📬</div><h3>Press Enquiries</h3><p>Reach our communications team for interviews, quotes or campaign collaborations.</p><div style="margin-top:20px;"><button class="btn-secondary" style="font-size:13px;padding:10px 20px;" onclick="showPage('main');smoothTo('contact')">Contact Us</button></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- STORIES -->
+<div id="stories" class="page subpage">
+  <div class="subpage-hero" style="height:300px;background:var(--card2);">
+    <div class="subpage-hero-overlay" style="background:linear-gradient(to top,rgba(13,17,23,0.95) 0%,transparent 100%)"></div>
+    <div class="subpage-hero-content">
+      <div class="section-badge">IMPACT</div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,56px);font-weight:900;line-height:1.1;margin-top:12px;">Stories of <em style="color:var(--orange);font-style:italic;">Change</em></h1>
+    </div>
+  </div>
+  <div class="subpage-body">
+    <span class="back-btn" onclick="showPage('main')">← Back to Home</span>
+    <p style="color:var(--muted);font-size:17px;margin-bottom:8px;max-width:600px;">Every number in our impact report represents a real person. Here are some of their stories.</p>
+    <div class="stories-grid">
+      <div class="story-card"><div class="story-card-img"><img src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600&q=80&fit=crop&crop=face,center" alt="Story"></div><div class="story-card-body"><div class="tag">EDUCATION</div><h3>Priya's Journey</h3><p>A scholarship from She Can helped Priya complete her Class 12 exams and enroll in a nursing college in Chennai — the first in her family to attend college.</p></div></div>
+      <div class="story-card"><div class="story-card-img"><img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80&fit=crop" alt="Story"></div><div class="story-card-body"><div class="tag">DIGITAL SKILLS</div><h3>From Intern to Founder</h3><p>After our 3-month internship, Meera launched her own digital agency, now employing five other women from her village in Rajasthan.</p></div></div>
+      <div class="story-card"><div class="story-card-img"><img src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&q=80&fit=crop&crop=center" alt="Story"></div><div class="story-card-body"><div class="tag">MENSTRUAL HEALTH</div><h3>The Workshop That Changed Everything</h3><p>A single hygiene workshop in rural Bihar led a village panchayat to allocate a budget for sanitary supplies in all local schools — reaching 400+ girls.</p></div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════ ADMIN PANEL ══════════════════════════════════════════ -->
+
+<!-- Admin Login Screen -->
+<div id="admin-panel" style="display:none;position:fixed;inset:0;z-index:1000;overflow:hidden;">
+
+  <!-- Login Screen -->
+  <div id="admin-login-screen" style="display:flex;align-items:center;justify-content:center;height:100vh;background:var(--bg);">
+    <div class="admin-login-card">
+      <div style="width:56px;height:56px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 24px;">🛡</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;margin-bottom:6px;">Admin Access</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:32px;">She Can Foundation — Secure Login</p>
+      <input id="admin-email" type="email" placeholder="Admin email address" style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:13px 16px;color:var(--white);font-size:15px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:12px;display:block;">
+      <input id="admin-pass" type="password" placeholder="Password" style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:13px 16px;color:var(--white);font-size:15px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:20px;display:block;">
+      <button onclick="adminLogin()" style="width:100%;background:var(--orange);color:#fff;border:none;border-radius:50px;padding:14px;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:12px;transition:background .2s;" onmouseover="this.style.background='var(--orange-dark)'" onmouseout="this.style.background='var(--orange)'">Sign In to Admin</button>
+      <button onclick="closeAdminPanel()" style="width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:50px;padding:12px;font-size:14px;cursor:pointer;">← Back to Site</button>
+      <div id="admin-login-err" style="display:none;color:#f87171;font-size:13px;margin-top:12px;text-align:center;"></div>
+    </div>
+  </div>
+
+  <!-- Full Dashboard (shown after login) -->
+  <div id="admin-dashboard" style="display:none;height:100vh;">
+    <div class="admin-layout">
+      <!-- Sidebar -->
+      <div class="admin-sidebar">
+        <div class="admin-sidebar-header">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+            <div style="width:32px;height:32px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;">♥</div>
+            <div><div class="brand">She Can</div><div class="sub">ADMIN PANEL</div></div>
+          </div>
+        </div>
+        <div class="admin-nav">
+          <div class="admin-nav-section">OVERVIEW</div>
+          <div class="admin-nav-item active" onclick="adminNav(this,'dash-overview')"><span class="nav-icon">📊</span> Dashboard</div>
+          <div class="admin-nav-item" onclick="adminNav(this,'dash-activity')"><span class="nav-icon">🕐</span> Recent Activity</div>
+          <div class="admin-nav-section">SUBMISSIONS</div>
+          <div class="admin-nav-item" onclick="adminNav(this,'dash-messages')"><span class="nav-icon">✉</span> Messages</div>
+          <div class="admin-nav-item" onclick="adminNav(this,'dash-volunteers')"><span class="nav-icon">🤝</span> Volunteers</div>
+          <div class="admin-nav-item" onclick="adminNav(this,'dash-interns')"><span class="nav-icon">🎓</span> Interns</div>
+          <div class="admin-nav-item" onclick="adminNav(this,'dash-donations')"><span class="nav-icon">💰</span> Donations</div>
+          <div class="admin-nav-item" onclick="adminNav(this,'dash-partners')"><span class="nav-icon">🏢</span> Partners</div>
+          <div class="admin-nav-section">MANAGEMENT</div>
+          <div class="admin-nav-item" onclick="adminNav(this,'dash-campaigns')"><span class="nav-icon">📣</span> Campaigns</div>
+          <div class="admin-nav-item" onclick="adminNav(this,'dash-content')"><span class="nav-icon">✏️</span> Content</div>
+        </div>
+        <div style="padding:16px 24px;border-top:1px solid var(--border);">
+          <div id="admin-user-label" style="font-size:12px;color:var(--muted);margin-bottom:10px;word-break:break-all;"></div>
+          <button onclick="adminSignOut()" style="width:100%;background:transparent;border:1px solid var(--border);color:var(--muted);padding:8px;border-radius:50px;font-size:12px;cursor:pointer;">Sign Out</button>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="admin-main">
+        <div class="admin-topbar">
+          <h2 id="admin-page-title">Dashboard</h2>
+          <div class="admin-topbar-actions">
+            <div class="admin-user-chip">🟢 <span id="admin-user-chip-email"></span></div>
+          </div>
+        </div>
+        <div class="admin-content">
+
+          <!-- OVERVIEW -->
+          <div id="dash-overview" class="admin-section active">
+            <div class="admin-stats-row" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px;">
+              <div class="admin-stat-card"><div class="asc-icon">✉</div><div class="asc-label">Total Messages</div><div class="asc-val" id="stat-messages">—</div><div class="asc-change">↑ Loading…</div></div>
+              <div class="admin-stat-card"><div class="asc-icon">🤝</div><div class="asc-label">Volunteer Requests</div><div class="asc-val" id="stat-volunteers">—</div><div class="asc-change">↑ Loading…</div></div>
+              <div class="admin-stat-card"><div class="asc-icon">🎓</div><div class="asc-label">Intern Applications</div><div class="asc-val" id="stat-interns">—</div><div class="asc-change">↑ Loading…</div></div>
+            </div>
+            <div class="admin-stats-row" style="grid-template-columns:repeat(3,1fr);margin-bottom:32px;">
+              <div class="admin-stat-card"><div class="asc-icon">💰</div><div class="asc-label">Donations Recorded</div><div class="asc-val" id="stat-donations">—</div><div class="asc-change">↑ Loading…</div></div>
+              <div class="admin-stat-card"><div class="asc-icon">🏢</div><div class="asc-label">Partner Enquiries</div><div class="asc-val" id="stat-partners">—</div><div class="asc-change">↑ Loading…</div></div>
+              <div class="admin-stat-card"><div class="asc-icon">✦</div><div class="asc-label">Skills Contributions</div><div class="asc-val" id="stat-skills">—</div><div class="asc-change">↑ Loading…</div></div>
+            </div>
+            <div class="admin-chart-row">
+              <div class="admin-chart-card">
+                <h3>Monthly Donations (₹)</h3>
+                <div class="bar-chart" id="donation-chart">
+                  <div class="bar-item"><div class="bar" style="height:40px;background:var(--orange);opacity:.5"></div><span class="bar-label">Jan</span></div>
+                  <div class="bar-item"><div class="bar" style="height:65px;background:var(--orange);opacity:.6"></div><span class="bar-label">Feb</span></div>
+                  <div class="bar-item"><div class="bar" style="height:50px;background:var(--orange);opacity:.65"></div><span class="bar-label">Mar</span></div>
+                  <div class="bar-item"><div class="bar" style="height:80px;background:var(--orange);opacity:.7"></div><span class="bar-label">Apr</span></div>
+                  <div class="bar-item"><div class="bar" style="height:55px;background:var(--orange);opacity:.75"></div><span class="bar-label">May</span></div>
+                  <div class="bar-item"><div class="bar" style="height:95px;background:var(--orange);opacity:.8"></div><span class="bar-label">Jun</span></div>
+                  <div class="bar-item"><div class="bar" style="height:70px;background:var(--orange);opacity:.85"></div><span class="bar-label">Jul</span></div>
+                  <div class="bar-item"><div class="bar" style="height:110px;background:var(--orange)"></div><span class="bar-label">Aug</span></div>
+                </div>
+              </div>
+              <div class="admin-chart-card">
+                <h3>Engagement Breakdown</h3>
+                <div style="display:flex;flex-direction:column;gap:12px;">
+                  <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span>Volunteer Applications</span><span style="color:var(--orange)">40%</span></div><div style="height:6px;background:var(--bg2);border-radius:3px;"><div style="height:6px;background:var(--orange);border-radius:3px;width:40%"></div></div></div>
+                  <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span>Intern Applications</span><span style="color:var(--orange)">30%</span></div><div style="height:6px;background:var(--bg2);border-radius:3px;"><div style="height:6px;background:var(--orange);border-radius:3px;width:30%"></div></div></div>
+                  <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span>Donations</span><span style="color:var(--orange)">20%</span></div><div style="height:6px;background:var(--bg2);border-radius:3px;"><div style="height:6px;background:var(--orange);border-radius:3px;width:20%"></div></div></div>
+                  <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span>Contact Messages</span><span style="color:var(--orange)">10%</span></div><div style="height:6px;background:var(--bg2);border-radius:3px;"><div style="height:6px;background:var(--orange);border-radius:3px;width:10%"></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MESSAGES -->
+          <div id="dash-messages" class="admin-section">
+            <div class="admin-table-wrap">
+              <div class="admin-table-header">
+                <h3>Contact Messages</h3>
+                <button class="refresh-btn" onclick="loadCollection('contact_submissions','messages-table','messages')">↻ Refresh</button>
+              </div>
+              <div id="messages-table"><div class="admin-empty">Loading messages…</div></div>
+            </div>
+          </div>
+
+          <!-- VOLUNTEERS -->
+          <div id="dash-volunteers" class="admin-section">
+            <div class="admin-table-wrap">
+              <div class="admin-table-header">
+                <h3>Volunteer Applications</h3>
+                <button class="refresh-btn" onclick="loadCollection('volunteer_applications','volunteers-table','volunteers')">↻ Refresh</button>
+              </div>
+              <div id="volunteers-table"><div class="admin-empty">Loading…</div></div>
+            </div>
+          </div>
+
+          <!-- INTERNS -->
+          <div id="dash-interns" class="admin-section">
+            <div class="admin-table-wrap">
+              <div class="admin-table-header">
+                <h3>Internship Applications</h3>
+                <button class="refresh-btn" onclick="loadCollection('intern_applications','interns-table','interns')">↻ Refresh</button>
+              </div>
+              <div id="interns-table"><div class="admin-empty">Loading…</div></div>
+            </div>
+          </div>
+
+          <!-- DONATIONS -->
+          <div id="dash-donations" class="admin-section">
+            <div class="admin-table-wrap">
+              <div class="admin-table-header">
+                <h3>Donation Records</h3>
+                <button class="refresh-btn" onclick="loadCollection('donations','donations-table','donations')">↻ Refresh</button>
+              </div>
+              <div id="donations-table"><div class="admin-empty">Loading…</div></div>
+            </div>
+          </div>
+
+          <!-- PARTNERS -->
+          <div id="dash-partners" class="admin-section">
+            <div class="admin-table-wrap">
+              <div class="admin-table-header">
+                <h3>Partnership Enquiries</h3>
+                <button class="refresh-btn" onclick="loadCollection('partner_enquiries','partners-table','partners')">↻ Refresh</button>
+              </div>
+              <div id="partners-table"><div class="admin-empty">Loading…</div></div>
+            </div>
+          </div>
+
+          <!-- ACTIVITY -->
+          <div id="dash-activity" class="admin-section">
+            <div class="admin-chart-card" style="margin-bottom:24px;">
+              <h3>Recent Activity Feed</h3>
+              <div id="activity-feed" class="admin-activity-feed">
+                <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">Dashboard loaded</div><div class="activity-time">Just now</div></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CAMPAIGNS -->
+          <div id="dash-campaigns" class="admin-section">
+            <div class="admin-table-wrap">
+              <div class="admin-table-header"><h3>Active Campaigns</h3></div>
+              <table class="admin-table">
+                <thead><tr><th>Campaign</th><th>Status</th><th>Goal</th><th>Raised</th><th>Actions</th></tr></thead>
+                <tbody>
+                  <tr><td>Her Period Shouldn't End Her Education</td><td><span class="admin-badge badge-new">Active</span></td><td>₹50,00,000</td><td>₹23,40,000</td><td><button class="del-btn">Pause</button></td></tr>
+                  <tr><td>Digital Skills for 1000 Women</td><td><span class="admin-badge badge-pending">Planned</span></td><td>₹25,00,000</td><td>₹0</td><td><button class="del-btn">Launch</button></td></tr>
+                  <tr><td>Back to School Drive 2026</td><td><span class="admin-badge badge-read">Completed</span></td><td>₹10,00,000</td><td>₹10,00,000</td><td><span style="font-size:12px;color:var(--muted)">Archived</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- CONTENT -->
+          <div id="dash-content" class="admin-section">
+            <div class="admin-table-wrap" style="padding:28px;">
+              <h3 style="font-size:16px;font-weight:600;margin-bottom:24px;">Website Content Management</h3>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                <div class="form-group"><label>Hero Tagline</label><input type="text" value="Together We Can Change The World"></div>
+                <div class="form-group"><label>Live Impact Text</label><input type="text" value="37 girls supported this week"></div>
+                <div class="form-group"><label>Campaign Stat</label><input type="text" value="1,20,000+"></div>
+                <div class="form-group"><label>Girls Supported Count</label><input type="text" value="1,20,000+"></div>
+              </div>
+              <button style="background:var(--orange);color:#fff;border:none;border-radius:50px;padding:12px 28px;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;" onclick="alert('Content management requires a live Firestore integration. Feature placeholder active.')">Save Changes</button>
+              <div style="margin-top:12px;font-size:13px;color:var(--muted)">Note: Connect to Firestore document to enable live content updates.</div>
+            </div>
+          </div>
+
+        </div><!-- end admin-content -->
+      </div><!-- end admin-main -->
+    </div><!-- end admin-layout -->
+  </div><!-- end admin-dashboard -->
+
+</div><!-- end admin-panel -->
+
+<script src="script.js"></script>
+
+</body>
+</html>
