@@ -197,19 +197,6 @@ Through this project, I practiced and implemented:
 
 ---
 
-# 📌 Future Improvements
-
-- Payment Gateway Integration
-- Email Notifications
-- Live Analytics
-- Image Upload Support
-- Role-Based Admin Access
-- Deployment to Production Server
-- Cloud Storage Integration
-- API Integration
-
----
-
 # ⚠️ Security Note
 
 Sensitive credentials and configurations should be protected using environment variables and proper Firebase security rules in production environments.
