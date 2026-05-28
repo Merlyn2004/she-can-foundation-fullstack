@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────── PAGE ROUTER ─────────────────────────────────────────── */
-let currentPage = 'main';
+let currentPage = '';
 let selectedDonationAmount = 500;
 
 function showPage(id) {
