@@ -57,7 +57,7 @@ All submissions are dynamically stored using Firebase Firestore Database.
 
 ---
 
-# 🔐 Admin Panel Access
+# 🔐 Admin Panel Access(ctrl+shift+A)
 
 An admin access option is included in the website footer.
 
@@ -85,7 +85,8 @@ The admin panel is connected with:
 - Statistics Dashboard
 
 ### Demo Credentials
-Available upon request for security purposes.
+usename:shecan@gmail.com
+password:Shecan2026
 
 ---
 
