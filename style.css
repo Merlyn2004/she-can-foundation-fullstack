@@ -17,7 +17,7 @@
     font-family: 'DM Sans', sans-serif;
     font-size: 18px;
     line-height: 1.7;
-    overflow-x: 
+    overflow-x: hidden;
   }
   a { text-decoration: none; color: inherit; }
 
